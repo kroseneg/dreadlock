@@ -18,7 +18,7 @@ enum CMDLIST {
 #line 55 "parse.rl"
 
 
-#line 22 "parse.c"
+#line 17 "parse.c"
 static const int command_start = 20;
 static const int command_first_final = 20;
 static const int command_error = 0;
@@ -46,7 +46,7 @@ void ragel_parse(dreadlock_client_state *st) {
     int canwrite = PARSE_BUFSIZ;
 
     
-#line 50 "parse.c"
+#line 41 "parse.c"
 	{
 	cs = command_start;
 	ts = 0;
@@ -74,13 +74,13 @@ void ragel_parse(dreadlock_client_state *st) {
         pe = writeptr + bread;
 
         
-#line 78 "parse.c"
+#line 65 "parse.c"
 	{
 	if ( p == pe )
 		goto _test_eof;
 	switch ( cs )
 	{
-tr10:
+tr8:
 #line 41 "parse.rl"
 	{ 
                 int timeout_ms = -1;
@@ -106,7 +106,7 @@ st20:
 case 20:
 #line 1 "NONE"
 	{ts = p;}
-#line 110 "parse.c"
+#line 92 "parse.c"
 	switch( (*p) ) {
 		case 76: goto st1;
 		case 85: goto st11;
@@ -177,14 +177,18 @@ tr5:
                     keylen++;
                 }
             }
+#line 34 "parse.rl"
+	{cmd = CMD_LOCK;}
 	goto st6;
 st6:
 	if ( ++p == pe )
 		goto _test_eof6;
 case 6:
-#line 186 "parse.c"
-	if ( (*p) == 32 )
-		goto st7;
+#line 167 "parse.c"
+	switch( (*p) ) {
+		case 13: goto st7;
+		case 32: goto tr7;
+	}
 	if ( (*p) < 65 ) {
 		if ( 48 <= (*p) && (*p) <= 57 )
 			goto tr5;
@@ -198,17 +202,10 @@ st7:
 	if ( ++p == pe )
 		goto _test_eof7;
 case 7:
-	if ( (*p) == 32 )
-		goto st7;
-	if ( 48 <= (*p) && (*p) <= 57 )
-		goto tr7;
+	if ( (*p) == 10 )
+		goto tr8;
 	goto st0;
 tr7:
-#line 18 "parse.rl"
-	{
-                if (!timeout_s) 
-                    timeout_s = p;
-            }
 #line 34 "parse.rl"
 	{cmd = CMD_LOCK;}
 	goto st8;
@@ -216,22 +213,36 @@ st8:
 	if ( ++p == pe )
 		goto _test_eof8;
 case 8:
-#line 220 "parse.c"
+#line 194 "parse.c"
 	switch( (*p) ) {
-		case 13: goto st9;
-		case 32: goto tr9;
+		case 13: goto st7;
+		case 32: goto tr7;
 	}
 	if ( 48 <= (*p) && (*p) <= 57 )
-		goto tr7;
+		goto tr9;
 	goto st0;
+tr9:
+#line 18 "parse.rl"
+	{
+                if (!timeout_s) 
+                    timeout_s = p;
+            }
+#line 34 "parse.rl"
+	{cmd = CMD_LOCK;}
+	goto st9;
 st9:
 	if ( ++p == pe )
 		goto _test_eof9;
 case 9:
-	if ( (*p) == 10 )
-		goto tr10;
+#line 212 "parse.c"
+	switch( (*p) ) {
+		case 13: goto st7;
+		case 32: goto tr10;
+	}
+	if ( 48 <= (*p) && (*p) <= 57 )
+		goto tr9;
 	goto st0;
-tr9:
+tr10:
 #line 34 "parse.rl"
 	{cmd = CMD_LOCK;}
 	goto st10;
@@ -239,10 +250,10 @@ st10:
 	if ( ++p == pe )
 		goto _test_eof10;
 case 10:
-#line 243 "parse.c"
+#line 226 "parse.c"
 	switch( (*p) ) {
-		case 13: goto st9;
-		case 32: goto tr9;
+		case 13: goto st7;
+		case 32: goto tr10;
 	}
 	goto st0;
 st11:
@@ -330,9 +341,9 @@ st18:
 	if ( ++p == pe )
 		goto _test_eof18;
 case 18:
-#line 334 "parse.c"
+#line 314 "parse.c"
 	switch( (*p) ) {
-		case 13: goto st9;
+		case 13: goto st7;
 		case 32: goto tr18;
 	}
 	if ( (*p) < 65 ) {
@@ -352,9 +363,9 @@ st19:
 	if ( ++p == pe )
 		goto _test_eof19;
 case 19:
-#line 356 "parse.c"
+#line 334 "parse.c"
 	switch( (*p) ) {
-		case 13: goto st9;
+		case 13: goto st7;
 		case 32: goto tr18;
 	}
 	goto st0;

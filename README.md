@@ -17,12 +17,14 @@ Protocol
 
 It talks over TCP and supports two commands.  First, `lock`:
 
-    lock <key> <timeout>\r\n
+    lock <key> [<timeout>]\r\n
 
 Issuing `lock` will block the calling client for `timeout`
 milliseconds until either the key is held exclusively by
-this client or the timeout elapses.  Keys must contain only
-ascii letters and digits.
+this client or the timeout elapses. If you omit the timeout
+the command blocks until the lock is aquired, possibly waiting
+forever.
+Keys must contain only ascii letters and digits.
 
 The response will be either:
 

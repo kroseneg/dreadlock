@@ -76,13 +76,18 @@ void do_lock(dreadlock_client_state *st, char *key, int len, int timeout_ms) {
         DL_PREPEND(l->waits, c);
 
         dreadlock_timer timer = {now_plus_ms(timeout_ms), &c->wait, NULL, NULL};
-        DL_APPEND(timers, &timer);
-        DL_SORT(timers, timer_compare);
+        if (timeout_ms >= 0) {
+            DL_APPEND(timers, &timer);
+            DL_SORT(timers, timer_compare);
+        }
+
 
         tasksleep(&c->wait);
 
         if (c->won)  {
-            DL_DELETE(timers, &timer);
+            if (timeout_ms >= 0) {
+                DL_DELETE(timers, &timer);
+            }
             dreadlock_user_lock *ul = malloc(sizeof(dreadlock_user_lock));
             ul->lock = l;
             ul->wait = c;

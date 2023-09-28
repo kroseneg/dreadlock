@@ -30,7 +30,7 @@ enum CMDLIST {
                 }
             };
         lock =
-            ( [lL][oO][cC][kK] ' '+ key ' '+ timeout ' '*)
+            ( [lL][oO][cC][kK] ' '+ key (' '+ timeout )? ' '*)
             @{cmd = CMD_LOCK;};
         unlock =
             ( [uU][nN][lL][oO][cC][kK] ' '+ key ' '*)
